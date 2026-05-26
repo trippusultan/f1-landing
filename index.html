@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lewis Hamilton — 7× World Champion</title>
+<meta name="description" content="The official digital home of Sir Lewis Hamilton — 7-time Formula 1 World Champion, record-breaker, and cultural icon.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        carbon: { 900: '#0a0a0a', 800: '#111111', 700: '#1a1a1a', 600: '#222222' },
+        racing: { red: '#e10600', dark: '#b80500', accent: '#ff1a1a' },
+        champagne: { 50: '#faf8f5', 100: '#f5f0e8', 200: '#ebe3d4' },
+      },
+      fontFamily: {
+        display: ['"Bebas Neue"', 'Impact', 'sans-serif'],
+        body: ['"Inter"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+    }
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-bg: #0a0a0a;
+    --c-surface: #111111;
+    --c-surface-2: #1a1a1a;
+    --c-border: #2a2a2a;
+    --c-text: #f0f0f0;
+    --c-text-dim: #999;
+    --c-accent: #e10600;
+    --c-accent-glow: rgba(225,6,0,0.35);
+  }
+  .light {
+    --c-bg: #faf8f5;
+    --c-surface: #ffffff;
+    --c-surface-2: #f5f0e8;
+    --c-border: #d4ccc0;
+    --c-text: #1a1816;
+    --c-text-dim: #787166;
+    --c-accent: #e10600;
+    --c-accent-glow: rgba(225,6,0,0.18);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--c-bg); color: var(--c-text);
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+    transition: background 0.5s ease, color 0.5s ease;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--c-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--c-accent); border-radius: 3px; }
+
+  /* Keyframes */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(48px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to   { opacity:1; }
+  }
+  @keyframes glowPulse {
+    0%,100% { box-shadow: 0 0 24px rgba(225,6,0,.25), 0 0 60px rgba(225,6,0,.08); }
+    50%     { box-shadow: 0 0 36px rgba(225,6,0,.45), 0 0 90px rgba(225,6,0,.15); }
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(10px); }
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .au { animation: fadeUp .9s cubic-bezier(.16,1,.3,1) forwards; opacity:0; }
+  .au-d1 { animation-delay: .12s; }
+  .au-d2 { animation-delay: .28s; }
+  .au-d3 { animation-delay: .44s; }
+  .au-d4 { animation-delay: .60s; }
+
+  /* Reveal on scroll */
+  .rv { opacity:0; transform:translateY(48px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .rv.v { opacity:1; transform:translateY(0); }
+  .rv-l { opacity:0; transform:translateX(-36px); transition:opacity .7s ease, transform .7s ease; }
+  .rv-l.v { opacity:1; transform:translateX(0); }
+  .rv-r { opacity:0; transform:translateX(36px); transition:opacity .7s ease, transform .7s ease; }
+  .rv-r.v { opacity:1; transform:translateX(0); }
+
+  /* Hero */
+  .hero {
+    position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .hero-bg {
+    position:absolute; inset:0; z-index:0;
+    background:
+      radial-gradient(ellipse 80% 55% at 65% 40%, rgba(225,6,0,.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 20% 75%, rgba(225,6,0,.03) 0%, transparent 50%),
+      linear-gradient(180deg, var(--c-bg) 0%, var(--c-surface) 100%);
+  }
+  .hero-grid {
+    position:absolute; inset:0; z-index:0; opacity:.4;
+    background-image:
+      linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 80%);
+  }
+  .hero-vignette {
+    position:absolute; inset:0; z-index:1;
+    background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 40%, var(--c-bg) 100%);
+  }
+  .hero-spotlight {
+    position:absolute; top:-20%; left:50%; transform:translateX(-50%);
+    width:600px; height:600px; border-radius:50%;
+    background: radial-gradient(circle, rgba(225,6,0,.04) 0%, transparent 70%);
+    z-index:0; pointer-events:none;
+  }
+
+  /* Gallery card */
+  .gcard {
+    position:relative; overflow:hidden; border-radius:14px; background:var(--c-surface-2);
+    transition: transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s ease;
+    cursor:pointer;
+  }
+  .gcard:hover {
+    transform: translateY(-10px) scale(1.015);
+    box-shadow: 0 24px 70px rgba(0,0,0,.5), 0 0 40px rgba(225,6,0,.12);
+  }
+  .gcard img {
+    width:100%; height:300px; object-fit:cover;
+    transition: transform .7s cubic-bezier(.16,1,.3,1);
+  }
+  .gcard:hover img { transform: scale(1.08); }
+  .gcard .overlay {
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,.75) 100%);
+    z-index:1; pointer-events:none;
+  }
+  .gcard .label {
+    position:absolute; bottom:0; left:0; right:0; padding: 1.25rem 1.5rem; z-index:2;
+  }
+
+  /* Stat card */
+  .stat {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+    padding: 2.5rem 1.5rem;
+    text-align:center;
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .stat:hover {
+    transform: translateY(-5px);
+    border-color: rgba(225,6,0,.3);
+    box-shadow: 0 12px 40px rgba(225,6,0,.08);
+  }
+
+  /* CTA */
+  .cta-btn {
+    position:relative; display:inline-flex; align-items:center; gap:.75rem;
+    padding:1rem 2.5rem; background:var(--c-accent); color:#fff;
+    font-weight:600; font-size:.95rem; letter-spacing:.06em; text-transform:uppercase;
+    border:none; border-radius:3px; cursor:pointer;
+    transition: all .25s cubic-bezier(.16,1,.3,1);
+    animation: glowPulse 3s ease-in-out infinite;
+    overflow:hidden;
+  }
+  .cta-btn:hover {
+    transform: scale(1.06); letter-spacing:.12em;
+    box-shadow: 0 0 50px rgba(225,6,0,.45), 0 0 100px rgba(225,6,0,.15);
+    animation:none;
+  }
+  .cta-btn:active { transform: scale(1.02); }
+
+  /* Nav */
+  .nav-wrap {
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    background: rgba(10,10,10,.75); border-bottom: 1px solid rgba(255,255,255,.04);
+    transition: background .4s ease, border-color .4s ease;
+  }
+  .light .nav-wrap {
+    background: rgba(250,248,245,.8); border-bottom-color: rgba(0,0,0,.06);
+  }
+
+  /* Toggle */
+  .tg {
+    width:52px; height:28px; border-radius:14px; cursor:pointer; position:relative;
+    background: var(--c-surface-2); border:1px solid var(--c-border);
+    transition: background .3s ease; flex-shrink:0;
+  }
+  .tg::after {
+    content:''; position:absolute; top:3px; left:3px;
+    width:20px; height:20px; border-radius:50%; background:var(--c-accent);
+    transition: transform .35s cubic-bezier(.68,-.15,.27,1.15);
+  }
+  .light .tg::after { transform: translateX(24px); }
+
+  /* Divider */
+  .divd { height:1px; background: linear-gradient(90deg, transparent, var(--c-border), transparent); }
+
+  /* Ticker */
+  .tick-track { display:flex; animation: ticker 35s linear infinite; white-space:nowrap; }
+  .tick-track:hover { animation-play-state: paused; }
+
+  /* Quote mark */
+  .qm { font-family:'Bebas Neue',Impact,sans-serif; font-size:9rem; line-height:1; color:var(--c-accent); opacity:.12; }
+
+  /* Chevron */
+  .chev { animation: bounce 2.2s ease-in-out infinite; }
+
+  /* Counter */
+  .cnt { font-variant-numeric: tabular-nums; }
+
+  /* Subtle noise texture */
+  .noise::before {
+    content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .gcard img { height: 220px; }
+    .qm { font-size: 5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== NAV ==================== -->
+<nav class="fixed top-0 left-0 right-0 z-50 nav-wrap">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="#hero" class="flex items-center gap-2.5">
+      <div class="w-7 h-1 bg-red-600 rounded-full"></div>
+      <span class="font-display text-2xl tracking-widest">LH44</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-[13px] font-medium" style="color:var(--c-text-dim)">
+      <a href="#legacy" class="hover:text-red-500 transition-colors duration-200">Legacy</a>
+      <a href="#gallery" class="hover:text-red-500 transition-colors duration-200">Gallery</a>
+      <a href="#stats" class="hover:text-red-500 transition-colors duration-200">Stats</a>
+      <a href="#quote" class="hover:text-red-500 transition-colors duration-200">Mindset</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="tg" id="thm" role="button" aria-label="Toggle theme" tabindex="0"></div>
+      <a href="#cta" class="hidden sm:inline-flex items-center text-[11px] font-bold uppercase tracking-widest border px-4 py-2 rounded-sm transition-all duration-200 hover:bg-red-600 hover:border-red-600 hover:text-white" style="border-color:var(--c-text-dim); color:var(--c-text-dim)">Join</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-spotlight"></div>
+  <div class="hero-grid"></div>
+  <!-- Decorative rings -->
+  <div class="absolute top-1/4 left-[8%] w-36 h-36 rounded-full border" style="border-color:rgba(225,6,0,.07)"></div>
+  <div class="absolute bottom-[20%] right-[10%] w-52 h-52 rounded-full border" style="border-color:rgba(225,6,0,.04)"></div>
+
+  <div class="relative z-[2] text-center px-6 max-w-5xl mx-auto">
+    <div class="au au-d1 mb-8">
+      <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full text-[11px] font-mono uppercase tracking-[.2em]" style="border:1px solid rgba(225,6,0,.2); color:var(--c-accent)">
+        <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+        7× Formula 1 World Champion
+      </div>
+    </div>
+
+    <h1 class="au au-d2 font-display text-[4.5rem] sm:text-[6rem] md:text-[8rem] lg:text-[9.5rem] leading-[.85] tracking-tight mb-8">
+      <span class="block">LEWIS</span>
+      <span class="block" style="color:var(--c-accent)">HAMILTON</span>
+    </h1>
+
+    <p class="au au-d3 text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-12 leading-relaxed" style="color:var(--c-text-dim)">
+      Record-breaker. Cultural icon. The most decorated driver in Formula 1 history.
+      <span class="font-medium" style="color:var(--c-text)">Rewriting what's possible — on and off the track.</span>
+    </p>
+
+    <div class="au au-d4 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <button class="cta-btn" onclick="document.getElementById('legacy').scrollIntoView({behavior:'smooth'})">
+        Explore the Legacy
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <a href="#gallery" class="px-6 py-4 text-[13px] font-semibold uppercase tracking-[.15em] border rounded-sm transition-all duration-200 hover:bg-white/5" style="border-color:var(--c-border); color:var(--c-text-dim)">
+        View Gallery
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <a href="#ticker" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-[2] flex flex-col items-center gap-2 group">
+    <span class="text-[10px] uppercase tracking-[.2em] transition-colors group-hover:text-red-500" style="color:var(--c-text-dim)">Scroll</span>
+    <div class="chev" style="color:var(--c-accent)">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </a>
+  <div class="hero-vignette"></div>
+</section>
+
+<!-- ==================== TICKER ==================== -->
+<div id="ticker" class="overflow-hidden py-5 border-y" style="border-color:var(--c-border); background:var(--c-surface)">
+  <div class="tick-track font-display text-lg md:text-xl tracking-[.15em]" style="color:var(--c-text-dim)">
+    <span class="mx-8">44</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">103 WINS</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">104 POLES</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">197 PODIUMS</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">7 WORLD TITLES</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">3,435 PTS</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <!-- duplicate for seamless loop -->
+    <span class="mx-8">44</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">103 WINS</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">104 POLES</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">197 PODIUMS</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">7 WORLD TITLES</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+    <span class="mx-8">3,435 PTS</span><span class="mx-8 text-red-600 opacity-60">◆</span>
+  </div>
+</div>
+
+<!-- ==================== LEGACY ==================== -->
+<section id="legacy" class="py-28 sm:py-36 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div class="rv">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-1 bg-red-600"></div>
+          <span class="text-[11px] font-mono uppercase tracking-[.2em]" style="color:var(--c-accent)">The Legacy</span>
+        </div>
+        <h2 class="font-display text-5xl sm:text-6xl lg:text-7xl leading-[.9] mb-8 tracking-tight">
+          MORE THAN<br><span style="color:var(--c-accent)">RACING</span>
+        </h2>
+        <p class="text-base md:text-lg leading-[1.75] mb-6" style="color:var(--c-text-dim)">
+          From his barnstorming debut in 2007 to his record-shattering 7th World Championship, Lewis Hamilton hasn't just competed — he's redefined the sport entirely. Every record that seemed untouchable, he's shattered.
+        </p>
+        <p class="text-base md:text-lg leading-[1.75] mb-10" style="color:var(--c-text-dim)">
+          Beyond the track, he's a force for change: the <em style="color:var(--c-text)">Hamilton Commission</em>, <em style="color:var(--c-text)">Mission 44</em>, and his relentless advocacy for diversity in motorsport have inspired a generation far beyond F1.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <div class="px-8 py-4 border rounded-sm" style="border-color:var(--c-border)">
+            <div class="font-display text-3xl cnt">07–24</div>
+            <div class="text-[10px] uppercase tracking-[.15em] mt-1" style="color:var(--c-text-dim)">Grand Prix Career</div>
+          </div>
+          <div class="px-8 py-4 border rounded-sm" style="border-color:var(--c-border)">
+            <div class="font-display text-3xl cnt">308</div>
+            <div class="text-[10px] uppercase tracking-[.15em] mt-1" style="color:var(--c-text-dim)">Race Entries</div>
+          </div>
+        </div>
+      </div>
+      <div class="rv-r relative">
+        <div class="aspect-[4/5] rounded-2xl overflow-hidden relative noise" style="background:var(--c-surface-2)">
+          <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80&auto=format&fit=crop"
+               alt="Formula 1 car close-up"
+               class="absolute inset-0 w-full h-full object-cover opacity-60"
+               onerror="this.style.display='none'">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 flex items-center justify-center font-display text-[22rem] leading-none opacity-[.03]" style="color:var(--c-accent)">44</div>
+          <div class="absolute bottom-0 left-0 right-0 p-8 z-[1]">
+            <div class="text-[10px] font-mono uppercase tracking-[.2em] mb-2" style="color:var(--c-accent)">Iconic Number</div>
+            <div class="font-display text-7xl leading-none">44</div>
+            <div class="text-sm mt-3 max-w-[260px]" style="color:var(--c-text-dim)">The number that transcended racing to become a global movement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divd"></div>
+
+<!-- ==================== GALLERY ==================== -->
+<section id="gallery" class="py-28 sm:py-36 px-6" style="background:var(--c-surface)">
+  <div class="max-w-7xl mx-auto">
+    <div class="rv text-center mb-16">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-8 h-1 bg-red-600"></div>
+        <span class="text-[11px] font-mono uppercase tracking-[.2em]" style="color:var(--c-accent)">Gallery</span>
+      </div>
+      <h2 class="font-display text-5xl sm:text-6xl tracking-tight">IN THE <span style="color:var(--c-accent)">FRAME</span></h2>
+    </div>
+
+    <div class="rv grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Card 1: Car close-up -->
+      <div class="gcard">
+        <img src="https://images.unsplash.com/photo-1504817343863-5092a923803e?w=600&q=80&auto=format&fit=crop" alt="F1 helmet close-up" onerror="this.style.display='none'">
+        <div class="overlay"></div>
+        <div class="label">
+          <div class="text-[10px] font-mono uppercase tracking-[.15em] mb-1" style="color:var(--c-accent)">Precision</div>
+          <div class="text-base font-semibold">The Helmet</div>
+        </div>
+      </div>
+      <!-- Card 2: Cockpit -->
+      <div class="gcard">
+        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80&auto=format&fit=crop" alt="Racing cockpit" onerror="this.style.display='none'">
+        <div class="overlay"></div>
+        <div class="label">
+          <div class="text-[10px] font-mono uppercase tracking-[.15em] mb-1" style="color:var(--c-accent)">Machine</div>
+          <div class="text-base font-semibold">Cockpit POV</div>
+        </div>
+      </div>
+      <!-- Card 3: Speed -->
+      <div class="gcard md:col-span-2 lg:col-span-1">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80&auto=format&fit=crop" alt="Speed on track" onerror="this.style.display='none'">
+        <div class="overlay"></div>
+        <div class="label">
+          <div class="text-[10px] font-mono uppercase tracking-[.15em] mb-1" style="color:var(--c-accent)">Raw Pace</div>
+          <div class="text-base font-semibold">On the Limit</div>
+        </div>
+      </div>
+      <!-- Card 4: Victory -->
+      <div class="gcard">
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&q=80&auto=format&fit=crop" alt="Victory moment" onerror="this.style.display='none'">
+        <div class="overlay"></div>
+        <div class="label">
+          <div class="text-[10px] font-mono uppercase tracking-[.15em] mb-1" style="color:var(--c-accent)">Podium</div>
+          <div class="text-base font-semibold">197 Times</div>
+        </div>
+      </div>
+      <!-- Card 5: Carbon detail -->
+      <div class="gcard">
+        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=80&auto=format&fit=crop" alt="Carbon fiber detail" onerror="this.style.display='none'">
+        <div class="overlay"></div>
+        <div class="label">
+          <div class="text-[10px] font-mono uppercase tracking-[.15em] mb-1" style="color:var(--c-accent)">Engineering</div>
+          <div class="text-base font-semibold">Carbon & Speed</div>
+        </div>
+      </div>
+      <!-- Card 6: Side profile -->
+      <div class="gcard">
+        <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=600&q=80&auto=format&fit=crop" alt="Car side profile" onerror="this.style.display='none'">
+        <div class="overlay"></div>
+        <div class="label">
+          <div class="text-[10px] font-mono uppercase tracking-[.15em] mb-1" style="color:var(--c-accent)">Silver Arrow</div>
+          <div class="text-base font-semibold">Mercedes W15</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STATS ==================== -->
+<section id="stats" class="py-28 sm:py-36 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="rv text-center mb-16">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-8 h-1 bg-red-600"></div>
+        <span class="text-[11px] font-mono uppercase tracking-[.2em]" style="color:var(--c-accent)">By the Numbers</span>
+      </div>
+      <h2 class="font-display text-5xl sm:text-6xl tracking-tight">THE <span style="color:var(--c-accent)">RECORDS</span></h2>
+    </div>
+
+    <div class="rv grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      <div class="stat">
+        <div class="font-display text-5xl md:text-6xl cnt" style="color:var(--c-accent)" data-count="103">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-3" style="color:var(--c-text-dim)">Grand Prix Wins</div>
+        <div class="text-lg font-display mt-1.5">All-Time Record</div>
+      </div>
+      <div class="stat">
+        <div class="font-display text-5xl md:text-6xl cnt" style="color:var(--c-accent)" data-count="197">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-3" style="color:var(--c-text-dim)">Podium Finishes</div>
+        <div class="text-lg font-display mt-1.5">In History</div>
+      </div>
+      <div class="stat">
+        <div class="font-display text-5xl md:text-6xl cnt" style="color:var(--c-accent)" data-count="104">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-3" style="color:var(--c-text-dim)">Pole Positions</div>
+        <div class="text-lg font-display mt-1.5">All-Time Record</div>
+      </div>
+      <div class="stat">
+        <div class="font-display text-5xl md:text-6xl cnt" style="color:var(--c-accent)" data-count="7">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-3" style="color:var(--c-text-dim)">World Titles</div>
+        <div class="text-lg font-display mt-1.5">Tied Most Ever</div>
+      </div>
+    </div>
+
+    <div class="rv grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mt-4 md:mt-5">
+      <div class="stat py-6">
+        <div class="font-display text-4xl cnt" data-count="44">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-2" style="color:var(--c-text-dim)">Grands Prix Entered</div>
+      </div>
+      <div class="stat py-6">
+        <div class="font-display text-4xl cnt" data-count="12">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-2" style="color:var(--c-text-dim)">Circuits Won At</div>
+      </div>
+      <div class="stat py-6">
+        <div class="font-display text-4xl cnt" data-count="65">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-2" style="color:var(--c-text-dim)">Fastest Laps</div>
+      </div>
+      <div class="stat py-6">
+        <div class="font-display text-3xl md:text-4xl cnt" data-count="3435">0</div>
+        <div class="text-[10px] uppercase tracking-[.12em] mt-2" style="color:var(--c-text-dim)">Career Points</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QUOTE ==================== -->
+<section id="quote" class="py-28 sm:py-36 px-6 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[.03]" style="background-image: repeating-linear-gradient(90deg, var(--c-border) 0px, var(--c-border) 1px, transparent 1px, transparent 60px), repeating-linear-gradient(0deg, var(--c-border) 0px, var(--c-border) 1px, transparent 1px, transparent 60px); background-size:60px 60px;"></div>
+  <div class="max-w-4xl mx-auto relative z-10">
+    <div class="rv text-center">
+      <div class="qm mb-2">"</div>
+      <blockquote class="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] leading-snug font-light -mt-6 mb-10" style="font-family:'Inter',sans-serif; font-weight:300;">
+        I don't fear failure. I only fear not trying.
+      </blockquote>
+      <div class="flex items-center justify-center gap-4">
+        <div class="w-10 h-1 bg-red-600"></div>
+        <span class="font-display text-xl tracking-[.15em]">LEWIS HAMILTON</span>
+        <div class="w-10 h-1 bg-red-600"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divd"></div>
+
+<!-- ==================== TIMELINE ==================== -->
+<section class="py-28 sm:py-36 px-6" style="background:var(--c-surface)">
+  <div class="max-w-3xl mx-auto">
+    <div class="rv text-center mb-16">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-8 h-1 bg-red-600"></div>
+        <span class="text-[11px] font-mono uppercase tracking-[.2em]" style="color:var(--c-accent)">The Journey</span>
+      </div>
+      <h2 class="font-display text-5xl sm:text-6xl tracking-tight">CHAMPIONSHIP <span style="color:var(--c-accent)">YEARS</span></h2>
+    </div>
+
+    <div class="relative">
+      <div class="absolute left-6 sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-px" style="background:var(--c-border)"></div>
+
+      <div class="rv-l relative pl-16 sm:pl-0 sm:w-1/2 sm:pr-14 sm:text-right mb-10">
+        <div class="absolute left-4 sm:left-auto sm:right-0 sm:translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2008</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">McLaren — 1st World Title, São Paulo Decider</div>
+      </div>
+      <div class="rv-r relative pl-16 sm:pl-14 sm:w-1/2 sm:ml-auto mb-10">
+        <div class="absolute left-4 sm:left-0 sm:-translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2014</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">Mercedes Era Begins — The Hybrid Revolution</div>
+      </div>
+      <div class="rv-l relative pl-16 sm:pl-0 sm:w-1/2 sm:pr-14 sm:text-right mb-10">
+        <div class="absolute left-4 sm:left-auto sm:right-0 sm:translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2015</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">Dominant Second Crown — 10 Wins</div>
+      </div>
+      <div class="rv-r relative pl-16 sm:pl-14 sm:w-1/2 sm:ml-auto mb-10">
+        <div class="absolute left-4 sm:left-0 sm:-translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2017</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">Epic Battle — 4-Way Title Fight</div>
+      </div>
+      <div class="rv-l relative pl-16 sm:pl-0 sm:w-1/2 sm:pr-14 sm:text-right mb-10">
+        <div class="absolute left-4 sm:left-auto sm:right-0 sm:translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2018</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">Fifth Title — Matching Fangio</div>
+      </div>
+      <div class="rv-r relative pl-16 sm:pl-14 sm:w-1/2 sm:ml-auto mb-10">
+        <div class="absolute left-4 sm:left-0 sm:-translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2019</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">Sixth Title — Total Domination</div>
+      </div>
+      <div class="rv-l relative pl-16 sm:pl-0 sm:w-1/2 sm:pr-14 sm:text-right">
+        <div class="absolute left-4 sm:left-auto sm:right-0 sm:translate-x-1/2 top-2.5 w-3.5 h-3.5 rounded-full bg-red-600 border-4 z-[1]" style="border-color:var(--c-surface)"></div>
+        <div class="font-display text-3xl" style="color:var(--c-accent)">2020</div>
+        <div class="text-sm mt-1" style="color:var(--c-text-dim)">7th Title — Schumacher's Record Broken</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section id="cta" class="py-28 sm:py-36 px-6 relative overflow-hidden">
+  <div class="absolute inset-0" style="background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(225,6,0,.06) 0%, transparent 70%);"></div>
+  <div class="max-w-3xl mx-auto relative z-10">
+    <div class="rv text-center">
+      <h2 class="font-display text-5xl sm:text-6xl lg:text-7xl tracking-tight mb-6">
+        JOIN THE<br><span style="color:var(--c-accent)">MOVEMENT</span>
+      </h2>
+      <p class="text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed" style="color:var(--c-text-dim)">
+        From the track to the world. Follow the journey of a seven-time world champion who's changing the game forever.
+      </p>
+      <button class="cta-btn">
+        Subscribe for Updates
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="py-10 px-6 border-t" style="border-color:var(--c-border)">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+    <a href="#hero" class="flex items-center gap-2.5">
+      <div class="w-5 h-1 bg-red-600 rounded-full"></div>
+      <span class="font-display text-lg tracking-wider">LH44</span>
+    </a>
+    <div class="flex items-center gap-6 text-[13px]" style="color:var(--c-text-dim)">
+      <a href="#" class="hover:text-red-500 transition-colors duration-200">About</a>
+      <a href="#" class="hover:text-red-500 transition-colors duration-200">Mission 44</a>
+      <a href="#" class="hover:text-red-500 transition-colors duration-200">Contact</a>
+      <a href="#" class="hover:text-red-500 transition-colors duration-200">Press</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="#" class="hover:text-red-500 transition-colors duration-200" style="color:var(--c-text-dim)" aria-label="Twitter/X">
+        <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557a9.83 9.83 0 01-2.828.775 4.932 4.932 0 002.165-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.062c0 2.385 1.693 4.374 3.946 4.827a4.935 4.935 0 01-2.212.084 4.928 4.928 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.054 0 14.002-7.496 14.002-13.986 0-.213-.005-.425-.014-.636A10.012 10.012 0 0024 4.557z"/></svg>
+      </a>
+      <a href="#" class="hover:text-red-500 transition-colors duration-200" style="color:var(--c-text-dim)" aria-label="Instagram">
+        <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="#" class="hover:text-red-500 transition-colors duration-200" style="color:var(--c-text-dim)" aria-label="YouTube">
+        <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+    </div>
+  </div>
+  <p class="text-center mt-8 text-[11px] tracking-wider" style="color:var(--c-text-dim)">
+    © 2026 LH44 — A tribute. Not affiliated with Lewis Management Ltd.
+  </p>
+</footer>
+
+<script>
+// Theme toggle
+const tg = document.getElementById('thm');
+tg.addEventListener('click', () => {
+  document.documentElement.classList.toggle('dark');
+  document.documentElement.classList.toggle('light');
+});
+tg.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();tg.click();} });
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('v'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el => io.observe(el));
+
+// Counter animation
+const co = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    const el = e.target;
+    if(el.dataset.done) return;
+    el.dataset.done = '1';
+    const target = parseInt(el.dataset.count);
+    if(!target) return;
+    const dur = 2200;
+    const t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 4);
+      el.textContent = Math.round(target * ease).toLocaleString();
+      if(p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.cnt[data-count]').forEach(el => co.observe(el));
+</script>
+
+</body>
+</html>
